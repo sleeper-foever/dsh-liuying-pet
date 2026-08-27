@@ -1,0 +1,119 @@
+{
+  "petManifestVersion": 2,
+  "id": "liuying",
+  "displayName": "流萤",
+  "description": "由 Downloads/liuying.png 精灵表制作的本地宠物。8 列 × 9 行 × 192×208 像素，行序遵循 9 行动画契约：idle / running-right / running-left / waving / jumping / failed / waiting / running / review。",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "local",
+  "renderer": "sprite2d",
+  "sprite2d": {
+    "spritesheetPath": "spritesheet.webp",
+    "frames": [
+      6,
+      8,
+      8,
+      4,
+      5,
+      8,
+      6,
+      6,
+      6
+    ],
+    "tracks": {
+      "idle": {
+        "durations": [
+          500,
+          500,
+          600,
+          500,
+          500,
+          600
+        ]
+      },
+      "running-right": {
+        "durations": [
+          300,
+          300,
+          300,
+          300,
+          300,
+          300,
+          300,
+          400
+        ]
+      },
+      "running-left": {
+        "durations": [
+          300,
+          300,
+          300,
+          300,
+          300,
+          300,
+          300,
+          400
+        ]
+      },
+      "waving": {
+        "durations": [
+          450,
+          450,
+          450,
+          450
+        ]
+      },
+      "jumping": {
+        "durations": [
+          400,
+          400,
+          400,
+          450,
+          450
+        ]
+      },
+      "failed": {
+        "durations": [
+          550,
+          550,
+          550,
+          600,
+          650,
+          700,
+          550,
+          550
+        ]
+      },
+      "waiting": {
+        "durations": [
+          550,
+          550,
+          600,
+          550,
+          550,
+          600
+        ]
+      },
+      "running": {
+        "durations": [
+          330,
+          330,
+          330,
+          330,
+          330,
+          400
+        ]
+      },
+      "review": {
+        "durations": [
+          650,
+          650,
+          650,
+          650,
+          650,
+          650
+        ]
+      }
+    }
+  }
+}
