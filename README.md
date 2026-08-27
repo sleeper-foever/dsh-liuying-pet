@@ -43,6 +43,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 │   ├── spritesheet.webp        # 完整 11 行无损图集 1536×2288
 │   └── previews/*.gif          # 11 条轨道预览（含 dancing/victory）
 ├── patch-dsh-pet.mjs           # 11 行扩展轨补丁（备份+修改 dsh-pet 插件）
+├── patch-dsh-pet-hover.mjs     # 悬停触发 jumping/变身补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -52,6 +53,12 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 精灵表**第 5 行（5 帧）就是变身动画**：流萤 → 光效爆发 → 萨姆机甲。
 它被映射到 DSH 的 `jumping` 轨并配置了 `sequences.done`——**每次完成任务时宠物都会变身**（变身与挥手交替）。
 预览：`assets/liuying/previews/jumping.gif`
+
+**鼠标悬停也能触发变身**：运行仓库内的悬停补丁后，鼠标移到宠物身上就播放 `jumping`（变身），移开恢复：
+
+```bash
+node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
 
 ## 扩展行（第 10–11 行动画）
 
