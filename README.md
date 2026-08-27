@@ -46,6 +46,12 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 └── LICENSE
 ```
 
+## 变身（流萤 → 萨姆）
+
+精灵表**第 5 行（5 帧）就是变身动画**：流萤 → 光效爆发 → 萨姆机甲。
+它被映射到 DSH 的 `jumping` 轨并配置了 `sequences.done`——**每次完成任务时宠物都会变身**（变身与挥手交替）。
+预览：`assets/liuying/previews/jumping.gif`
+
 ## 工作原理
 
 - 用户目录模式：把 `assets/liuying/` 复制到 `$DSH_HOME/pets/liuying/`（默认 `~/.dsh/pets/liuying`），

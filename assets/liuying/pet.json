@@ -2,7 +2,7 @@
   "petManifestVersion": 2,
   "id": "liuying",
   "displayName": "流萤",
-  "description": "由 Downloads/liuying.png 精灵表制作的本地宠物。8 列 × 9 行 × 192×208 像素，行序遵循 9 行动画契约：idle / running-right / running-left / waving / jumping / failed / waiting / running / review。",
+  "description": "由 Downloads/liuying.png 精灵表制作。第 5 行（5 帧）为「变身」动画：流萤 → 光效 → 萨姆机甲，映射到 jumping 轨；完成任务（done 阶段）时播放。",
   "version": "1.0.0",
   "license": "MIT",
   "author": "local",
@@ -65,12 +65,13 @@
       },
       "jumping": {
         "durations": [
-          400,
-          400,
-          400,
-          450,
-          450
-        ]
+          480,
+          520,
+          560,
+          600,
+          640
+        ],
+        "loop": false
       },
       "failed": {
         "durations": [
@@ -115,5 +116,15 @@
         ]
       }
     }
+  },
+  "sequences": {
+    "done": [
+      "jumping",
+      "waving",
+      "jumping",
+      "waving",
+      "jumping",
+      "idle"
+    ]
   }
 }
