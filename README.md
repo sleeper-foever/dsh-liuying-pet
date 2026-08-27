@@ -51,6 +51,19 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 它被映射到 DSH 的 `jumping` 轨并配置了 `sequences.done`——**每次完成任务时宠物都会变身**（变身与挥手交替）。
 预览：`assets/liuying/previews/jumping.gif`
 
+## 扩展行（第 10–11 行动画）
+
+精灵表还有第 10 行（8 帧）与第 11 行（8 帧）扩展动画，已声明为 `dancing` / `victory` 轨，
+但默认 DSH 渲染器只播放固定 9 行。**要播放扩展行，需要给已安装的宠物插件打个补丁**：
+
+```bash
+cd /home/ggbond/deepseek-harness/pet/plugin-patch
+node patch-dsh-pet.mjs     # 备份 + 修改 lib/index.js、lib/client.js
+# 重启 DSH Web
+```
+
+补丁与验证说明见 `pet/plugin-patch/README.md`；不打补丁时宠物仍可正常使用（9 行），扩展轨自动忽略。
+
 ## 工作原理
 
 - 用户目录模式：把 `assets/liuying/` 复制到 `$DSH_HOME/pets/liuying/`（默认 `~/.dsh/pets/liuying`），

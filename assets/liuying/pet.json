@@ -2,13 +2,14 @@
   "petManifestVersion": 2,
   "id": "liuying",
   "displayName": "流萤",
-  "description": "由 Downloads/liuying.png 精灵表制作。第 5 行（5 帧）为「变身」动画：流萤 → 光效 → 萨姆机甲，映射到 jumping 轨；完成任务（done 阶段）时播放。",
-  "version": "1.0.0",
+  "description": "由 Downloads/liuying.png 精灵表制作：第 5 行（5 帧）为「变身」动画（流萤→萨姆，映射 jumping 轨）；第 10 行 dancing、第 11 行 victory 为扩展动画（需安装 11 行补丁后播放）。",
+  "version": "1.1.0",
   "license": "MIT",
   "author": "local",
   "renderer": "sprite2d",
   "sprite2d": {
     "spritesheetPath": "spritesheet.webp",
+    "atlasRows": 11,
     "frames": [
       6,
       8,
@@ -18,7 +19,9 @@
       8,
       6,
       6,
-      6
+      6,
+      8,
+      8
     ],
     "tracks": {
       "idle": {
@@ -114,15 +117,49 @@
           650,
           650
         ]
+      },
+      "dancing": {
+        "durations": [
+          350,
+          350,
+          400,
+          350,
+          350,
+          400,
+          350,
+          350
+        ],
+        "loop": true
+      },
+      "victory": {
+        "durations": [
+          450,
+          450,
+          450,
+          500,
+          450,
+          450,
+          500,
+          450
+        ],
+        "loop": false,
+        "fallback": "idle"
       }
     }
   },
   "sequences": {
+    "idle": [
+      "idle",
+      "idle",
+      "idle",
+      "idle",
+      "dancing"
+    ],
     "done": [
       "jumping",
-      "waving",
+      "victory",
       "jumping",
-      "waving",
+      "victory",
       "jumping",
       "idle"
     ]

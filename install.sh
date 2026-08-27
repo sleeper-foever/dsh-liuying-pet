@@ -43,6 +43,8 @@ else
     previews/waiting.gif
     previews/running.gif
     previews/review.gif
+    previews/dancing.gif
+    previews/victory.gif
   )
   for f in "${FILES[@]}"; do
     curl -fsSL "$BASE/assets/$PET_ID/$f" -o "$WORK/assets/$PET_ID/$f"
