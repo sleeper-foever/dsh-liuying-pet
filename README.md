@@ -1,8 +1,9 @@
 # 流萤 · Liuying (DSH 宠物)
 
-一个可直接安装到 DeepSeek Harness 的 sprite2d 宠物插件包：8 列 × 9 行 × 192×208，
-遵循 9 行动画契约（idle / running-right / running-left / waving / jumping / failed /
-waiting / running / review），清单格式 v2（petManifestVersion 2）。
+一个可直接安装到 DeepSeek Harness 的 sprite2d 宠物插件包：**8 列 × 11 行 × 192×208**。
+前 9 行遵循标准动画契约（idle / running-right / running-left / waving / jumping /
+failed / waiting / running / review）；第 10–11 行为**扩展轨**（`dancing` / `victory`，
+配合仓库内的 `patch-dsh-pet.mjs` 补丁即可播放），清单格式 v2（petManifestVersion 2）。
 
 ![idle](./assets/liuying/previews/idle.gif)
 
@@ -39,8 +40,9 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── install.sh                  # 一键安装脚本（本地/远程两种模式）
 ├── assets/liuying/
 │   ├── pet.json                # v2 sprite2d 宠物清单
-│   ├── spritesheet.webp        # 9 行无损图集 1536×1872
-│   └── previews/*.gif          # 9 条轨道预览
+│   ├── spritesheet.webp        # 完整 11 行无损图集 1536×2288
+│   └── previews/*.gif          # 11 条轨道预览（含 dancing/victory）
+├── patch-dsh-pet.mjs           # 11 行扩展轨补丁（备份+修改 dsh-pet 插件）
 ├── README.md
 └── LICENSE
 ```
@@ -53,16 +55,19 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 
 ## 扩展行（第 10–11 行动画）
 
-精灵表还有第 10 行（8 帧）与第 11 行（8 帧）扩展动画，已声明为 `dancing` / `victory` 轨，
-但默认 DSH 渲染器只播放固定 9 行。**要播放扩展行，需要给已安装的宠物插件打个补丁**：
+精灵表第 10 行（8 帧）与第 11 行（8 帧）是扩展动画，已声明为 `dancing` / `victory` 轨。
+默认 DSH 渲染器只播放固定 9 行；**先打补丁再播放**（仓库已附带 `patch-dsh-pet.mjs`）：
 
 ```bash
-cd /home/ggbond/deepseek-harness/pet/plugin-patch
-node patch-dsh-pet.mjs     # 备份 + 修改 lib/index.js、lib/client.js
-# 重启 DSH Web
+# 方式一：克隆后打补丁
+cd dsh-liuying-pet && node patch-dsh-pet.mjs
+
+# 方式二：一行命令打补丁
+curl -fsSL https://raw.githubusercontent.com/sleeper-foever/dsh-liuying-pet/main/patch-dsh-pet.mjs | node
 ```
 
-补丁与验证说明见 `pet/plugin-patch/README.md`；不打补丁时宠物仍可正常使用（9 行），扩展轨自动忽略。
+补丁会自动备份 `lib/index.js`、`lib/client.js`，改完**重启 DSH Web** 生效。
+不打补丁时宠物仍可正常使用（9 行），扩展轨自动忽略；回滚：`node patch-dsh-pet.mjs --revert`。
 
 ## 工作原理
 
@@ -74,7 +79,7 @@ node patch-dsh-pet.mjs     # 备份 + 修改 lib/index.js、lib/client.js
 
 ## 注意
 
-- 当前 DSH 的 sprite2d 渲染器只播放固定 9 行；原精灵表第 10–11 行扩展帧不会被播放。
+- 默认渲染器只播放固定 9 行；第 10–11 行扩展帧需要先运行 `patch-dsh-pet.mjs` 补丁（见「扩展行」一节）才能播放。
 - 素材版权：本包 LICENSE 为 MIT；请确认角色素材的再分发授权后再公开分享/商用。
 
 ## 卸载
