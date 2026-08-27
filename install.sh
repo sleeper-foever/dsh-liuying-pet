@@ -26,7 +26,7 @@ WORK=""
 if [ -f "$SCRIPT_DIR/assets/$PET_ID/pet.json" ]; then
   WORK="$SCRIPT_DIR"
 else
-  BASE="${LIUYING_PET_BASE:-https://raw.githubusercontent.com/USER/REPO/main}"
+  BASE="${LIUYING_PET_BASE:-https://raw.githubusercontent.com/sleeper-foever/dsh-liuying-pet/main}"
   echo "==> 从 $BASE 下载宠物资产 …"
   WORK="$(mktemp -d)"
   trap 'rm -rf "$WORK"' EXIT

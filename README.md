@@ -10,15 +10,14 @@ waiting / running / review），清单格式 v2（petManifestVersion 2）。
 
 ```bash
 # 方式一：一行命令（无需克隆，直接执行）
-curl -fsSL https://raw.githubusercontent.com/USER/REPO/main/install.sh \
-  | LIUYING_PET_BASE=https://raw.githubusercontent.com/USER/REPO/main bash
+curl -fsSL https://raw.githubusercontent.com/sleeper-foever/dsh-liuying-pet/main/install.sh | bash
 
 # 方式二：克隆后安装
-git clone https://github.com/USER/REPO.git
-cd REPO && bash install.sh
+git clone https://github.com/sleeper-foever/dsh-liuying-pet.git
+cd dsh-liuying-pet && bash install.sh
 ```
 
-> 把 `USER` / `REPO` 换成你的 GitHub 用户名和仓库名。
+> 远程模式默认从 `raw.githubusercontent.com/sleeper-foever/dsh-liuying-pet/main` 下载；
 
 ## 安装选项
 
