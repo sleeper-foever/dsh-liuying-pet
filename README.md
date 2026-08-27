@@ -44,6 +44,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 │   └── previews/*.gif          # 11 条轨道预览（含 dancing/victory）
 ├── patch-dsh-pet.mjs           # 11 行扩展轨补丁（备份+修改 dsh-pet 插件）
 ├── patch-dsh-pet-hover.mjs     # 悬停触发 jumping/变身补丁（可选）
+├── patch-dsh-pet-interact.mjs   # 交互触发动作补丁（单击/双击/右键/滚轮，可选）
 ├── README.md
 └── LICENSE
 ```
@@ -58,6 +59,22 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 
 ```bash
 node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 交互触发（全部 11 个动作都能玩）
+
+运行仓库内的 `patch-dsh-pet-interact.mjs` 后：
+
+| 操作 | 动作 |
+|---|---|
+| 单击 | waving（挥手） |
+| 双击 | dancing（跳舞） |
+| 右键 | victory（胜利） |
+| 拖拽松手 | waving |
+| 滚轮 | 动作展示模式：循环播放全部 11 个动作 |
+
+```bash
+node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 扩展行（第 10–11 行动画）
