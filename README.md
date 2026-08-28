@@ -86,7 +86,7 @@ node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH W
 
 运行仓库内的 `patch-dsh-pet-vanish.mjs` 后：
 
-- **隐藏**：点击隐藏 → 宠物化作**光粒子消散**再隐藏
+- **隐藏**：点击隐藏 → 宠物化作**40 粒光粒子缓缓消散**（约 1.5 秒）再隐藏
 - **召唤**：重新召唤 → 先亮起**光柱**，宠物随之淡入
 
 ```bash
