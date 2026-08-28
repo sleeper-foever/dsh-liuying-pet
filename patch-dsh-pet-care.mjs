@@ -80,7 +80,7 @@ const CARE_LOGIC = T([
   '\t\t\t\t\tcareTimerRef.current = window.setTimeout(() => setCareBubble(null), 5000);',
   '\t\t\t\t\tif (typeof playAction === "function") playAction("waving", 1500);',
   '\t\t\t\t\tscheduleCare();',
-  '\t\t\t\t}, 40000 + Math.random() * 50000);',
+  '\t\t\t\t}, 90000 + Math.random() * 210000);',
   '\t\t\t};',
   '\t\t\t(0, react.useEffect)(() => {',
   '\t\t\t\tif (props.visual !== void 0) return;',
@@ -125,7 +125,12 @@ if (src.includes('const [careBubble, setCareBubble]')) {
   applied.push('关心语言包状态')
 }
 if (src.includes('const CARE_POOL = [')) {
-  console.log('   跳过（已存在）: 关心语言包逻辑')
+  if (src.includes('40000 + Math.random() * 50000')) {
+    src = once(src, '\t\t\t\t}, 40000 + Math.random() * 50000);', '\t\t\t\t}, 90000 + Math.random() * 210000);', '问候频率改为 90-300 秒')
+    applied.push('问候频率改为 90-300 秒')
+  } else {
+    console.log('   跳过（已存在）: 关心语言包逻辑（已是最新频率）')
+  }
 } else {
   src = insertAfter(src, CLEANUP, CARE_LOGIC, '关心语言包逻辑')
   applied.push('关心/问候语言包 + 定时器')

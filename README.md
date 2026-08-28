@@ -83,7 +83,7 @@ node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH W
 
 ## 关心/问候语言包
 
-运行仓库内的 `patch-dsh-pet-care.mjs` 后，宠物**每 40–90 秒随机说一句关心/问候**（「开拓者，记得多喝热水哦～」等 20 条文案）。
+运行仓库内的 `patch-dsh-pet-care.mjs` 后，宠物**每 90–300 秒随机说一句关心/问候**（「开拓者，记得多喝热水哦～」等 20 条文案）。
 
 ```bash
 node patch-dsh-pet-care.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
