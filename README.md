@@ -49,6 +49,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-fx.mjs         # 好感度晋升特效 + 启动问候补丁（可选）
 ├── patch-dsh-pet-glow.mjs       # 宠物呼吸光效补丁（可选）
 ├── patch-dsh-pet-care.mjs       # 关心/问候语言包补丁（可选）
+├── patch-dsh-pet-vanish.mjs     # 隐藏消散 + 召唤光柱补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -79,6 +80,17 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 隐藏消散 + 召唤光柱
+
+运行仓库内的 `patch-dsh-pet-vanish.mjs` 后：
+
+- **隐藏**：点击隐藏 → 宠物化作**光粒子消散**再隐藏
+- **召唤**：重新召唤 → 先亮起**光柱**，宠物随之淡入
+
+```bash
+node patch-dsh-pet-vanish.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 关心/问候语言包
