@@ -62,7 +62,7 @@ const HELPER = T([
   'function affinityGain(base, points, config) {',
   '\tconst tier = Math.floor(points / (config.difficultyStep ?? 10));',
   '\tconst scale = 1 / (1 + tier * (config.difficultyDecay ?? 0.15));',
-  '\treturn Math.max(1, Math.round(base * scale));',
+  '\treturn Math.max(0.1, Math.round(base * scale * 10) / 10);',
   '}',
   '',
 ])
@@ -127,7 +127,12 @@ if (src.includes('difficultyDecay')) {
   applied.push('难度配置 difficultyStep/Decay')
 }
 if (src.includes('function affinityGain')) {
-  console.log('   跳过（已存在）: affinityGain 助手')
+  if (src.includes('Math.max(1, Math.round(base * scale))')) {
+    src = once(src, '\treturn Math.max(1, Math.round(base * scale));', '\treturn Math.max(0.1, Math.round(base * scale * 10) / 10);', '保底改为 0.1')
+    applied.push('保底改为 0.1')
+  } else {
+    console.log('   跳过（已存在）: affinityGain 助手（已是最新公式）')
+  }
 } else {
   src = insertBefore(src, 'function emptyAffinity() {', HELPER, 'affinityGain 助手')
   applied.push('affinityGain 助手')
