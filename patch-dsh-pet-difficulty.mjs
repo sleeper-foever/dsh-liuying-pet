@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
  * Patch @linxin666/dsh-pet affinity gain difficulty (host side,
- * lib/state-DrMX22GL.js): every +10 affinity points the gains shrink
- * ("每多10亲密度，获取难度合理升高").
+ * lib/state-DrMX22GL.js):
+ *  - 难度按好感度每 +10 递增：gain = max(0.1, round(base / (1 + tier*decay) × 10) / 10)
+ *  - 保底 +0.1（不是 +1），收益保留小数精确累加
+ *  - 加分不取整（内部存浮点），只有显示取整（affinityViewOf points 四舍五入）
  *
- *   gain(base, points) = max(1, round(base / (1 + floor(points/10) * decay)))
- *
- * Config fields added: difficultyStep (10), difficultyDecay (0.15).
- * pet / feed / turn rewards all pass through this scale; min gain is 1.
+ * 脚本是"归一化"式的：无论当前是旧版（0.1 保底 + 加分取整）还是上版
+ * （+1 整数收益），重跑都会收敛到本设计。
  *
  * Usage:
  *   node patch-dsh-pet-difficulty.mjs              # patch installed package
@@ -38,6 +38,8 @@ function insertBefore(src, anchor, prefix, label) {
 }
 const T = (lines) => lines.join('\n')
 
+const TARGET_FORMULA = '\treturn Math.max(0.1, Math.round(base * scale * 10) / 10);'
+
 const CONFIG_OLD = T([
   'const defaultAffinityConfig = {',
   '\tturnReward: 1,',
@@ -62,7 +64,7 @@ const HELPER = T([
   'function affinityGain(base, points, config) {',
   '\tconst tier = Math.floor(points / (config.difficultyStep ?? 10));',
   '\tconst scale = 1 / (1 + tier * (config.difficultyDecay ?? 0.15));',
-  '\treturn Math.max(1, Math.round(base * scale));',
+  TARGET_FORMULA,
   '}',
   '',
 ])
@@ -74,7 +76,7 @@ const PET_OLD = T([
 ])
 const PET_NEW = T([
   '\t\tconst petGain = affinityGain(config.petReward, state.points, config);',
-  '\t\tnext.points = clamp(Math.round(state.points + petGain));',
+  '\t\tnext.points = clamp(state.points + petGain);',
   '\t\treturn {',
   '\t\t\taffinity: next,',
   '\t\t\tdelta: petGain,',
@@ -87,7 +89,7 @@ const FEED_OLD = T([
 ])
 const FEED_NEW = T([
   '\t\tconst feedGain = affinityGain(config.feedReward, state.points, config);',
-  '\t\tnext.points = clamp(Math.round(state.points + feedGain));',
+  '\t\tnext.points = clamp(state.points + feedGain);',
   '\t\treturn {',
   '\t\t\taffinity: next,',
   '\t\t\tdelta: feedGain,',
@@ -100,7 +102,7 @@ const TURN_OLD = T([
 const TURN_NEW = T([
   '\tnext.turns += 1;',
   '\tconst turnGain = affinityGain(config.turnReward, state.points, config);',
-  '\tnext.points = clamp(Math.round(state.points + turnGain));',
+  '\tnext.points = clamp(state.points + turnGain);',
   '\treturn next;',
 ])
 
@@ -120,62 +122,59 @@ const ts = new Date().toISOString().replace(/[:.]/g, '-')
 copyFileSync(stateFile, stateFile + '.bak-' + ts)
 const applied = []
 
+// 1) 难度配置（feedReward 5→3 已在更早版本；缺失则全量插入）
 if (src.includes('difficultyDecay')) {
   if (src.includes('feedReward: 5,')) {
     src = once(src, '\tfeedReward: 5,', '\tfeedReward: 3,', '喂食奖励降为 3')
     applied.push('喂食奖励降为 3')
   } else {
-    console.log('   跳过（已存在）: 难度配置（喂食已是 3）')
+    console.log('   跳过（已存在）: 难度配置')
   }
 } else {
   src = once(src, CONFIG_OLD, CONFIG_NEW, '难度配置')
   applied.push('难度配置 difficultyStep/Decay')
 }
+
+// 2) affinityGain 助手：归一化到 0.1 保底公式
 if (src.includes('function affinityGain')) {
-  if (src.includes('Math.max(0.1, Math.round(base * scale * 10) / 10)')) {
-    src = once(src, '\treturn Math.max(0.1, Math.round(base * scale * 10) / 10);', '\treturn Math.max(1, Math.round(base * scale));', '保底 0.1 改回 1（整数）')
-    applied.push('保底改回 1（整数收益）')
+  if (src.includes(TARGET_FORMULA)) {
+    console.log('   跳过（已存在）: 0.1 保底公式')
+  } else if (src.includes('\treturn Math.max(1, Math.round(base * scale));')) {
+    src = once(src, '\treturn Math.max(1, Math.round(base * scale));', TARGET_FORMULA, '公式还原为 0.1 保底')
+    applied.push('公式还原为 0.1 保底')
   } else {
-    console.log('   跳过（已存在）: affinityGain 助手（已是最新公式）')
+    fail('affinityGain 公式无法识别')
   }
 } else {
   src = insertBefore(src, 'function emptyAffinity() {', HELPER, 'affinityGain 助手')
-  applied.push('affinityGain 助手')
+  applied.push('affinityGain 助手（0.1 保底）')
 }
-if (src.includes('const petGain = affinityGain')) {
-  console.log('   跳过（已存在）: pet 衰减')
-} else {
-  src = once(src, PET_OLD, PET_NEW, 'pet 衰减')
-  applied.push('pet 奖励衰减')
-}
-if (src.includes('const feedGain = affinityGain')) {
-  console.log('   跳过（已存在）: feed 衰减')
-} else {
-  src = once(src, FEED_OLD, FEED_NEW, 'feed 衰减')
-  applied.push('feed 奖励衰减')
-}
-if (src.includes('const turnGain = affinityGain')) {
-  console.log('   跳过（已存在）: turn 衰减')
-} else {
-  src = once(src, TURN_OLD, TURN_NEW, 'turn 衰减')
-  applied.push('回合奖励衰减')
-}
-// 加分点取整（旧版未取整时升级）
-for (const [marker, find, rep, label] of [
-  ['clamp(Math.round(state.points + petGain))', '\t\tnext.points = clamp(state.points + petGain);', '\t\tnext.points = clamp(Math.round(state.points + petGain));', 'pet 加分取整'],
-  ['clamp(Math.round(state.points + feedGain))', '\t\tnext.points = clamp(state.points + feedGain);', '\t\tnext.points = clamp(Math.round(state.points + feedGain));', 'feed 加分取整'],
-  ['clamp(Math.round(state.points + turnGain))', '\tnext.points = clamp(state.points + turnGain);', '\tnext.points = clamp(Math.round(state.points + turnGain));', '回合加分取整'],
-]) {
-  if (src.includes(marker)) {
-    console.log('   跳过（已存在）: ' + label)
-  } else if (src.includes(find)) {
-    src = once(src, find, rep, label)
-    applied.push(label)
+
+// 3) pet/feed/turn：归一化到"加分不取整"（内部保留小数）
+const GAIN_POINTS = [
+  ['clamp(state.points + petGain)', 'clamp(Math.round(state.points + petGain))', '\t\tnext.points = clamp(state.points + petGain);', '\t\tnext.points = clamp(Math.round(state.points + petGain));', 'pet 加分保留小数'],
+  ['clamp(state.points + feedGain)', 'clamp(Math.round(state.points + feedGain))', '\t\tnext.points = clamp(state.points + feedGain);', '\t\tnext.points = clamp(Math.round(state.points + feedGain));', 'feed 加分保留小数'],
+  ['clamp(state.points + turnGain)', 'clamp(Math.round(state.points + turnGain))', '\tnext.points = clamp(state.points + turnGain);', '\tnext.points = clamp(Math.round(state.points + turnGain));', '回合加分保留小数'],
+]
+for (const [target, oldMark, targetLine, oldLine, label] of GAIN_POINTS) {
+  if (src.includes('const petGain = affinityGain') || src.includes('const feedGain = affinityGain') || src.includes('const turnGain = affinityGain')) {
+    if (src.includes(target)) {
+      console.log('   跳过（已存在）: ' + label)
+    } else if (src.includes(oldMark)) {
+      src = once(src, oldLine, targetLine, label)
+      applied.push(label)
+    } else {
+      console.log('   跳过（未找到）: ' + label)
+    }
   } else {
-    console.log('   跳过（未找到）: ' + label)
+    // 全新安装路径
+    if (label.startsWith('pet')) { src = once(src, PET_OLD, PET_NEW, 'pet 衰减'); applied.push('pet 奖励衰减（小数）') }
+    else if (label.startsWith('feed')) { src = once(src, FEED_OLD, FEED_NEW, 'feed 衰减'); applied.push('feed 奖励衰减（小数）') }
+    else { src = once(src, TURN_OLD, TURN_NEW, 'turn 衰减'); applied.push('回合奖励衰减（小数）') }
   }
 }
-// 亲密度显示取整（affinityViewOf）
+
+// 4) 显示取整（affinityViewOf）
 if (src.includes('points: Math.round(state.points)')) {
   console.log('   跳过（已存在）: 显示取整')
 } else if (src.includes('\t\tpoints: state.points,')) {
@@ -189,4 +188,4 @@ writeFileSync(stateFile, src, 'utf8')
 console.log('✔ 难度补丁已应用（' + stateFile + '）')
 for (const a of applied) console.log('   · ' + a)
 console.log('备份: lib/state-DrMX22GL.js.bak-' + ts)
-console.log('重启 DSH Web 后：好感度每多 10 点，获取难度提升（保底 +1）。')
+console.log('重启 DSH Web 后：好感度每多 10 点难度递增，收益保底 +0.1，显示为整数。')
