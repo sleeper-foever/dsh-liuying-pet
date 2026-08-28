@@ -79,6 +79,19 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
+## 好感度等级（每 10 点一级）
+
+运行仓库内的 `patch-dsh-pet-ranks.mjs` 后，等级阶梯为：
+
+```text
+幼鲸(0) → 伙伴(10) → 挚友(20) → 深海羁绊(30) → 海师(40) → 海尊(50)
+→ 海宗(60) → 海王(70) → 海帝(80) → 海圣(90) → 海神(100)
+```
+
+```bash
+node patch-dsh-pet-ranks.mjs   # 备份 + 修改宿主等级表；重启 DSH Web 生效
+```
+
 ## 好感度特效 + 启动问候
 
 运行仓库内的 `patch-dsh-pet-fx.mjs` 后：
