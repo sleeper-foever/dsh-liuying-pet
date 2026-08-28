@@ -45,6 +45,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet.mjs           # 11 行扩展轨补丁（备份+修改 dsh-pet 插件）
 ├── patch-dsh-pet-hover.mjs     # 悬停触发 jumping/变身补丁（可选）
 ├── patch-dsh-pet-interact.mjs   # 交互触发动作补丁（单击/双击/右键/滚轮，可选）
+├── patch-dsh-pet-chat.mjs       # 大模型对话补丁（悬停面板聊天，可选）
 ├── README.md
 └── LICENSE
 ```
@@ -75,6 +76,17 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 大模型对话（LLM Chat）
+
+运行仓库内的 `patch-dsh-pet-chat.mjs` 后，**悬停宠物 → 面板出现「和我说…」输入框**，回车即可和宠物聊天（回复显示在气泡里）。
+
+- 用你 DSH 的 `DEEPSEEK_API_KEY`（环境变量或 `~/.dsh/.credentials.yaml`），密钥不出本机
+- 可改模型：`DEEPSEEK_BASE_URL` / `DSH_PET_CHAT_MODEL`（默认 `deepseek-chat`）/ `DSH_PET_CHAT_SYSTEM`
+
+```bash
+node patch-dsh-pet-chat.mjs   # 备份 + 修改宿主/客户端；重启 DSH Web 生效
 ```
 
 ## 扩展行（第 10–11 行动画）
