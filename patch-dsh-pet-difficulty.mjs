@@ -52,7 +52,7 @@ const CONFIG_NEW = T([
   '\tturnReward: 1,',
   '\tpetReward: 1,',
   '\tpetCooldownMs: 1e4,',
-  '\tfeedReward: 5,',
+  '\tfeedReward: 3,',
   '\tfeedCooldownMs: 3e4,',
   '\tdifficultyStep: 10,',
   '\tdifficultyDecay: 0.15',
@@ -121,7 +121,12 @@ copyFileSync(stateFile, stateFile + '.bak-' + ts)
 const applied = []
 
 if (src.includes('difficultyDecay')) {
-  console.log('   跳过（已存在）: 难度配置')
+  if (src.includes('feedReward: 5,')) {
+    src = once(src, '\tfeedReward: 5,', '\tfeedReward: 3,', '喂食奖励降为 3')
+    applied.push('喂食奖励降为 3')
+  } else {
+    console.log('   跳过（已存在）: 难度配置（喂食已是 3）')
+  }
 } else {
   src = once(src, CONFIG_OLD, CONFIG_NEW, '难度配置')
   applied.push('难度配置 difficultyStep/Decay')
