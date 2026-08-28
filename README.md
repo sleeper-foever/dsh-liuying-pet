@@ -79,6 +79,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
+## 好感度获取难度递增
+
+运行仓库内的 `patch-dsh-pet-difficulty.mjs` 后，好感度**每多 10 点获取难度提升一档**（喂食 +5→+2，抚摸/回合保底 +1），升级节奏随之放缓。
+
+```bash
+node patch-dsh-pet-difficulty.mjs   # 备份 + 修改宿主奖励表；重启 DSH Web 生效
+```
+
 ## 好感度等级（每 10 点一级）
 
 运行仓库内的 `patch-dsh-pet-ranks.mjs` 后，等级阶梯为：
