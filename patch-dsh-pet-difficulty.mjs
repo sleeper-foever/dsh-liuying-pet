@@ -62,7 +62,7 @@ const HELPER = T([
   'function affinityGain(base, points, config) {',
   '\tconst tier = Math.floor(points / (config.difficultyStep ?? 10));',
   '\tconst scale = 1 / (1 + tier * (config.difficultyDecay ?? 0.15));',
-  '\treturn Math.max(0.1, Math.round(base * scale * 10) / 10);',
+  '\treturn Math.max(1, Math.round(base * scale));',
   '}',
   '',
 ])
@@ -74,7 +74,7 @@ const PET_OLD = T([
 ])
 const PET_NEW = T([
   '\t\tconst petGain = affinityGain(config.petReward, state.points, config);',
-  '\t\tnext.points = clamp(state.points + petGain);',
+  '\t\tnext.points = clamp(Math.round(state.points + petGain));',
   '\t\treturn {',
   '\t\t\taffinity: next,',
   '\t\t\tdelta: petGain,',
@@ -87,7 +87,7 @@ const FEED_OLD = T([
 ])
 const FEED_NEW = T([
   '\t\tconst feedGain = affinityGain(config.feedReward, state.points, config);',
-  '\t\tnext.points = clamp(state.points + feedGain);',
+  '\t\tnext.points = clamp(Math.round(state.points + feedGain));',
   '\t\treturn {',
   '\t\t\taffinity: next,',
   '\t\t\tdelta: feedGain,',
@@ -100,7 +100,7 @@ const TURN_OLD = T([
 const TURN_NEW = T([
   '\tnext.turns += 1;',
   '\tconst turnGain = affinityGain(config.turnReward, state.points, config);',
-  '\tnext.points = clamp(state.points + turnGain);',
+  '\tnext.points = clamp(Math.round(state.points + turnGain));',
   '\treturn next;',
 ])
 
@@ -132,9 +132,9 @@ if (src.includes('difficultyDecay')) {
   applied.push('难度配置 difficultyStep/Decay')
 }
 if (src.includes('function affinityGain')) {
-  if (src.includes('Math.max(1, Math.round(base * scale))')) {
-    src = once(src, '\treturn Math.max(1, Math.round(base * scale));', '\treturn Math.max(0.1, Math.round(base * scale * 10) / 10);', '保底改为 0.1')
-    applied.push('保底改为 0.1')
+  if (src.includes('Math.max(0.1, Math.round(base * scale * 10) / 10)')) {
+    src = once(src, '\treturn Math.max(0.1, Math.round(base * scale * 10) / 10);', '\treturn Math.max(1, Math.round(base * scale));', '保底 0.1 改回 1（整数）')
+    applied.push('保底改回 1（整数收益）')
   } else {
     console.log('   跳过（已存在）: affinityGain 助手（已是最新公式）')
   }
@@ -159,6 +159,30 @@ if (src.includes('const turnGain = affinityGain')) {
 } else {
   src = once(src, TURN_OLD, TURN_NEW, 'turn 衰减')
   applied.push('回合奖励衰减')
+}
+// 加分点取整（旧版未取整时升级）
+for (const [marker, find, rep, label] of [
+  ['clamp(Math.round(state.points + petGain))', '\t\tnext.points = clamp(state.points + petGain);', '\t\tnext.points = clamp(Math.round(state.points + petGain));', 'pet 加分取整'],
+  ['clamp(Math.round(state.points + feedGain))', '\t\tnext.points = clamp(state.points + feedGain);', '\t\tnext.points = clamp(Math.round(state.points + feedGain));', 'feed 加分取整'],
+  ['clamp(Math.round(state.points + turnGain))', '\tnext.points = clamp(state.points + turnGain);', '\tnext.points = clamp(Math.round(state.points + turnGain));', '回合加分取整'],
+]) {
+  if (src.includes(marker)) {
+    console.log('   跳过（已存在）: ' + label)
+  } else if (src.includes(find)) {
+    src = once(src, find, rep, label)
+    applied.push(label)
+  } else {
+    console.log('   跳过（未找到）: ' + label)
+  }
+}
+// 亲密度显示取整（affinityViewOf）
+if (src.includes('points: Math.round(state.points)')) {
+  console.log('   跳过（已存在）: 显示取整')
+} else if (src.includes('\t\tpoints: state.points,')) {
+  src = once(src, '\t\tpoints: state.points,', '\t\tpoints: Math.round(state.points),', '显示取整')
+  applied.push('亲密度显示取整')
+} else {
+  console.log('   跳过（未找到）: 显示取整锚点')
 }
 
 writeFileSync(stateFile, src, 'utf8')
