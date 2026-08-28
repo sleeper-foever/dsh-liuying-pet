@@ -46,6 +46,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-hover.mjs     # 悬停触发 jumping/变身补丁（可选）
 ├── patch-dsh-pet-interact.mjs   # 交互触发动作补丁（单击/双击/右键/滚轮，可选）
 ├── patch-dsh-pet-chat.mjs       # 大模型对话补丁（悬停面板聊天，可选）
+├── patch-dsh-pet-fx.mjs         # 好感度晋升特效 + 启动问候补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -76,6 +77,17 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 好感度晋升特效 + 启动问候
+
+运行仓库内的 `patch-dsh-pet-fx.mjs` 后：
+
+- **好感度升级**：幼鲸 → 伙伴 → 挚友 → 深海羁绊，升级瞬间气泡庆祝 + victory 动画 + 放大脉冲
+- **启动问候**：每次打开页面，宠物按时间段打招呼（早上好/中午好/下午好/晚上好，开拓者）+ 挥手
+
+```bash
+node patch-dsh-pet-fx.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 大模型对话（LLM Chat）
