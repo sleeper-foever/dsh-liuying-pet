@@ -47,6 +47,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-interact.mjs   # 交互触发动作补丁（单击/双击/右键/滚轮，可选）
 ├── patch-dsh-pet-chat.mjs       # 大模型对话补丁（悬停面板聊天，可选）
 ├── patch-dsh-pet-fx.mjs         # 好感度晋升特效 + 启动问候补丁（可选）
+├── patch-dsh-pet-glow.mjs       # 宠物呼吸光效补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -77,6 +78,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 宠物光效
+
+运行仓库内的 `patch-dsh-pet-glow.mjs` 后，宠物带**萤火呼吸光晕**（沿角色轮廓柔和脉冲，青绿荧光色，尊重系统减弱动态效果设置）。
+
+```bash
+node patch-dsh-pet-glow.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 好感度获取难度递增
