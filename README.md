@@ -48,6 +48,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-chat.mjs       # 大模型对话补丁（悬停面板聊天，可选）
 ├── patch-dsh-pet-fx.mjs         # 好感度晋升特效 + 启动问候补丁（可选）
 ├── patch-dsh-pet-glow.mjs       # 宠物呼吸光效补丁（可选）
+├── patch-dsh-pet-care.mjs       # 关心/问候语言包补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -78,6 +79,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 关心/问候语言包
+
+运行仓库内的 `patch-dsh-pet-care.mjs` 后，宠物**每 40–90 秒随机说一句关心/问候**（「开拓者，记得多喝热水哦～」等 20 条文案）。
+
+```bash
+node patch-dsh-pet-care.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 宠物光效
