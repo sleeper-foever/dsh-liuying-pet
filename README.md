@@ -54,6 +54,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-smooth.mjs      # 动画流畅度优化补丁（可选）
 ├── patch-dsh-pet-perf.mjs        # 性能优化补丁（pixelated/取整/transform）
 ├── patch-dsh-pet-clarity.mjs      # 清晰度 + 帧数提升补丁（可选）
+├── patch-dsh-pet-transition.mjs   # 动作衔接过渡补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -84,6 +85,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 动作衔接过渡
+
+运行仓库内的 `patch-dsh-pet-transition.mjs` 后：**切换动作时旧姿势淡出 180ms**，动作衔接不再跳变（只在换动作瞬间，不做每帧 crossfade）。
+
+```bash
+node patch-dsh-pet-transition.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 清晰度 + 帧数提升
