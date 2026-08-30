@@ -55,6 +55,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-perf.mjs        # 性能优化补丁（pixelated/取整/transform）
 ├── patch-dsh-pet-clarity.mjs      # 清晰度 + 帧数提升补丁（可选）
 ├── patch-dsh-pet-transition.mjs   # 动作衔接过渡补丁（可选）
+├── patch-dsh-pet-sound.mjs        # 点击音效补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -85,6 +86,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 点击音效
+
+运行仓库内的 `patch-dsh-pet-sound.mjs` 后：**点击宠物播「啵」声**，双击/右键有不同音调（Web Audio 合成，无需音频文件）。
+
+```bash
+node patch-dsh-pet-sound.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 动作衔接过渡
