@@ -51,6 +51,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-care.mjs       # 关心/问候语言包补丁（可选）
 ├── patch-dsh-pet-vanish.mjs     # 隐藏消散 + 召唤光柱补丁（可选）
 ├── patch-dsh-pet-mousefx.mjs    # 鼠标光子环绕/拖尾/水波补丁（可选）
+├── patch-dsh-pet-smooth.mjs      # 动画流畅度优化补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -81,6 +82,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 动画流畅度优化
+
+运行仓库内的 `patch-dsh-pet-smooth.mjs` 后：呼吸光晕改为**静态光层 + opacity 呼吸**（不再每帧重算 filter），精灵/鼠标光效加独立图层，**动画更流畅**。
+
+```bash
+node patch-dsh-pet-smooth.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 鼠标光效
