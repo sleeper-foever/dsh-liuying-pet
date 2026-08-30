@@ -53,6 +53,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-mousefx.mjs    # 鼠标光子环绕/拖尾/水波补丁（可选）
 ├── patch-dsh-pet-smooth.mjs      # 动画流畅度优化补丁（可选）
 ├── patch-dsh-pet-perf.mjs        # 性能优化补丁（pixelated/取整/transform）
+├── patch-dsh-pet-clarity.mjs      # 清晰度 + 帧数提升补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -83,6 +84,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 清晰度 + 帧数提升
+
+运行仓库内的 `patch-dsh-pet-clarity.mjs` 后：**精灵缩放吸附整数倍（更清晰）** + **帧时长缩短约 1.4 倍（每秒帧数更多、更顺）**。
+
+```bash
+node patch-dsh-pet-clarity.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 动画流畅度优化
