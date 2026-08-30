@@ -52,6 +52,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── patch-dsh-pet-vanish.mjs     # 隐藏消散 + 召唤光柱补丁（可选）
 ├── patch-dsh-pet-mousefx.mjs    # 鼠标光子环绕/拖尾/水波补丁（可选）
 ├── patch-dsh-pet-smooth.mjs      # 动画流畅度优化补丁（可选）
+├── patch-dsh-pet-interp.mjs      # 帧间插帧 cross-fade 补丁（可选）
 ├── README.md
 └── LICENSE
 ```
@@ -82,6 +83,14 @@ node patch-dsh-pet-hover.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 
 
 ```bash
 node patch-dsh-pet-interact.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
+```
+
+## 帧间插帧（cross-fade）
+
+运行仓库内的 `patch-dsh-pet-interp.mjs` 后：**当前帧与下一帧自动 cross-fade**，把低帧率精灵表的离散跳变变成连续过渡，动画更顺滑。
+
+```bash
+node patch-dsh-pet-interp.mjs   # 备份 + 修改 lib/client.js；重启 DSH Web 生效
 ```
 
 ## 动画流畅度优化
