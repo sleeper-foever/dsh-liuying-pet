@@ -40,7 +40,7 @@ bash install.sh --no-switch   # 安装但不切换当前宠物
 ├── install.sh                  # 一键安装脚本（本地/远程两种模式）
 ├── assets/liuying/
 │   ├── pet.json                # v2 sprite2d 宠物清单
-│   ├── spritesheet.webp        # 完整 11 行无损图集 1536×2288
+│   ├── spritesheet.webp        # 16 列 × 11 行插帧图集 3072×2288（143 帧）
 │   └── previews/*.gif          # 11 条轨道预览（含 dancing/victory）
 ├── patch-dsh-pet.mjs           # 11 行扩展轨补丁（备份+修改 dsh-pet 插件）
 ├── patch-dsh-pet-hover.mjs     # 悬停触发 jumping/变身补丁（可选）
